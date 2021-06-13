@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Update Blog Details
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title size="large">Update Blog Details</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-grid>
+    <ion-row class="ion-margin-top">
+      <ion-col>
+
+        <form *ngIf="form" [formGroup]="form" (ngSubmit)="submit()">
+          <ion-item>
+            <ion-label position="floating">Blog Title <ion-text color="danger">*</ion-text>
+            </ion-label>
+            <ion-input required formControlName="title" type="text"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Blog Subtitle <ion-text color="danger">*</ion-text>
+            </ion-label>
+            <ion-input required formControlName="subtitle" type="text"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Blog Description <ion-text color="danger">*</ion-text>
+            </ion-label>
+            <ion-textarea required formControlName="description"></ion-textarea>
+          </ion-item>
+
+          <ion-item>
+            <div class="upload ion-padding-top ion-padding-bottom ion-justify-content-between ion-align-items-center">
+              <ion-label>Upload an Image <ion-text color="danger">*</ion-text>
+              </ion-label>
+              <ion-button (click)="uploadBlogImage()">
+                <ion-icon name="camera-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-item>
+
+
+          <ion-button expand="block" class="ion-margin-top" color="success" type="submit"
+            [disabled]="form.invalid">
+            Submit
+          </ion-button>
+        </form>
+
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+</ion-content>

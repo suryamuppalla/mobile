@@ -1,0 +1,68 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>
+            Blog Items
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-header collapse="condense">
+        <ion-toolbar>
+            <ion-title size="large">Blog Items</ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-grid>
+        <ion-row *ngIf="blogService?.blogs">
+            <ion-col size="12" *ngFor="let blog of blogService.blogs; index as position">
+                <!-- <ion-img [src]="photo.webviewPath">
+                </ion-img> -->
+
+                <ion-card class="ion-no-margin">
+                    <img *ngIf="blog?.webviewPath"
+                         [src]="_DomSanitizationService.bypassSecurityTrustUrl(blog.webviewPath)" alt="Blog picture"/>
+                    <ion-card-header>
+                        <ion-card-subtitle>{{ blog.subtitle }}</ion-card-subtitle>
+                        <ion-card-title>{{ blog.title }}</ion-card-title>
+                    </ion-card-header>
+
+                    <ion-card-content>
+                        {{ blog.description }}
+
+                        <div class="ion-margin-top ion-justify-content-between actions">
+                            <ion-button routerLink="/view-blog/{{ blog.id }}" size="medium" expand="full" color="light"
+                                        class="btn">
+                                View Details
+                            </ion-button>
+                            <ion-button size="medium" (click)="showActionSheet(blog, position)" expand="full"
+                                        color="light"
+                                        class="btn">
+                                Actions
+                            </ion-button>
+                        </div>
+                    </ion-card-content>
+                </ion-card>
+
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-margin-top" *ngIf="blogService?.blogs?.length === 0">
+            <ion-col>
+                <ion-card class="ion-no-margin">
+                    <ion-card-header>
+                        <ion-card-title class="ion-text-center">Oops, No Blogs!</ion-card-title>
+                    </ion-card-header>
+
+                    <ion-card-content>
+                        <ion-button class="ion-margin-top" expand="block" color="primary" routerLink="/tabs/tab2"
+                                    routerDirection="root">
+                            Add New Blog
+                        </ion-button>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+
+    </ion-grid>
+</ion-content>

@@ -1,0 +1,7 @@
+{
+	"appId": "io.wlv.blog.ac.uk",
+	"appName": "Blog",
+	"bundledWebRuntime": false,
+	"npmClient": "npm",
+	"webDir": "www"
+}
