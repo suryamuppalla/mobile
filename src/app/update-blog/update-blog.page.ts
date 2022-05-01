@@ -1,8 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormControl, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {NavController, ToastController, ViewWillEnter} from '@ionic/angular';
-import {BlogService, UserBlog} from '../services/blog.service';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
+import { Photo } from '@capacitor/camera';
+import { NavController, ToastController, ViewWillEnter } from '@ionic/angular';
+import { Blogs } from '../interfaces/application.interface';
+import { ApplicationService } from '../services/application.service';
 
 @Component({
     selector: 'app-view-blog',
@@ -11,32 +14,33 @@ import {BlogService, UserBlog} from '../services/blog.service';
 })
 export class UpdateBlogPage implements OnInit, ViewWillEnter {
 
-    public form: FormGroup;
-    public blog: UserBlog;
-    public isNewPhoto: boolean;
+    public updateBlogFormInstance: FormGroup;
+    public userBlog: Blogs;
+    public newImage: Photo;
+    public newImageUploaded: boolean;
 
     constructor(
-        public blogService: BlogService,
-        public toastController: ToastController,
-        private router: Router,
-        private navCtrl: NavController,
-        private activatedRoute: ActivatedRoute
+        public blogInstance: ApplicationService,
+        public toastCtrl: ToastController,
+        private navigationCtrl: NavController,
+        private activeRoute: ActivatedRoute,
+        public domService: DomSanitizer
     ) {
     }
 
     ngOnInit() {
     }
 
-    async presentToast() {
-        const toast = await this.toastController.create({
-            message: 'Your Blog has been updated successfully.',
-            duration: 4000
+    async showToastMessage() {
+        const toast = await this.toastCtrl.create({
+            message: 'Your Blog Details has been updated successfully!',
+            duration: 3000
         });
         toast.present();
     }
 
     ionViewWillEnter() {
-        this.form = new FormGroup({
+        this.updateBlogFormInstance = new FormGroup({
             title: new FormControl(null, Validators.required),
             subtitle: new FormControl(null, Validators.required),
             description: new FormControl(null, Validators.required),
@@ -44,32 +48,33 @@ export class UpdateBlogPage implements OnInit, ViewWillEnter {
             created_at: new FormControl(null)
         });
 
-        this.activatedRoute.params.subscribe(params => {
+        this.activeRoute.params.subscribe(params => {
             const id = Number(params.id);
-            this.blog = this.blogService.getBlogDetails(id);
-            this.form.patchValue(this.blog);
+            this.userBlog = this.blogInstance.getBlogDetails(id);
+            this.updateBlogFormInstance.patchValue(this.userBlog);
         });
     }
 
-    uploadBlogImage() {
-        this.blogService.addNewToGallery()
+    uploadImage() {
+        this.blogInstance.insertImageToGallery()
             .then(photo => {
-                this.isNewPhoto = true;
-                this.form.patchValue({photo});
+                this.newImageUploaded = true;
+                this.newImage = photo;
+                this.updateBlogFormInstance.patchValue({ photo });
             });
     }
 
     submit() {
-        if (this.form.valid) {
-            this.blogService.updateBlog(this.form.value, this.blog.id, this.isNewPhoto)
+        if (this.updateBlogFormInstance.valid) {
+            this.blogInstance.updateBlog(this.updateBlogFormInstance.value, this.userBlog.id, this.newImageUploaded)
                 .then(async (response) => {
-                    await this.presentToast();
-                    await this.blogService.loadSaved();
-                    // await this.router.navigate(['/tabs/tab1']);
-                    this.navCtrl.back();
+                    await this.showToastMessage();
+                    await this.blogInstance.getBlogsList();
+                    // await this.router.navigate(['/blogs/homepage']);
+                    this.navigationCtrl.back();
                 }).catch(error => {
-                console.log(error);
-            });
+                    console.log(error);
+                });
         }
     }
 }

@@ -1,10 +1,7 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
     <ion-title>
-      Update Blog Details
+      Add New Blog
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -13,10 +10,7 @@
 
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-back-button></ion-back-button>
-      </ion-buttons>
-      <ion-title size="large">Update Blog Details</ion-title>
+      <ion-title size="large">Add New Blog</ion-title>
     </ion-toolbar>
   </ion-header>
 
@@ -24,7 +18,7 @@
     <ion-row class="ion-margin-top">
       <ion-col>
 
-        <form *ngIf="updateBlogFormInstance" [formGroup]="updateBlogFormInstance" (ngSubmit)="submit()">
+        <form *ngIf="blogForm" [formGroup]="blogForm" (ngSubmit)="submit()">
           <ion-item>
             <ion-label position="floating">Title <ion-text color="danger">*</ion-text>
             </ion-label>
@@ -45,7 +39,7 @@
 
           <ion-item>
             <div class="upload ion-padding-top ion-padding-bottom ion-justify-content-between ion-align-items-center">
-              <ion-label>Image Upload <ion-text color="danger">*</ion-text>
+              <ion-label>Upload Image <ion-text color="danger">*</ion-text>
               </ion-label>
               <ion-button (click)="uploadImage()">
                 <ion-icon name="camera-outline"></ion-icon>
@@ -55,16 +49,19 @@
 
           <ion-card>
             <div class="">
-              <img *ngIf="newImage?.webPath || userBlog?.webviewPath"
-                [src]="domService.bypassSecurityTrustUrl(newImage?.webPath || userBlog?.webviewPath)"
+              <img *ngIf="newImage?.webPath" [src]="domService.bypassSecurityTrustUrl(newImage?.webPath)"
                 alt="Blog Alt Image" />
             </div>
           </ion-card>
 
 
-          <ion-button expand="block" class="ion-margin-top" color="success" type="submit"
-            [disabled]="updateBlogFormInstance.invalid">
+          <ion-button expand="block" class="ion-margin-top" block color="success" type="submit"
+            [disabled]="blogForm.invalid">
             Submit
+          </ion-button>
+
+          <ion-button expand="block" class="ion-margin-top" block color="light" routerLink="/blogs/homepage">
+            Return To Blogs List
           </ion-button>
         </form>
 

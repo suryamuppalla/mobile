@@ -4,7 +4,7 @@
             <ion-back-button></ion-back-button>
         </ion-buttons>
         <ion-title>
-            View Blog Details
+            Details: {{ blogDetails?.title }}
         </ion-title>
     </ion-toolbar>
 </ion-header>
@@ -15,34 +15,34 @@
             <ion-buttons slot="start">
                 <ion-back-button></ion-back-button>
             </ion-buttons>
-            <ion-title size="large">View Blog Details</ion-title>
+            <ion-title size="large">Details: {{ blogDetails?.title }}</ion-title>
         </ion-toolbar>
     </ion-header>
 
     <ion-grid>
         <ion-row>
-            <ion-col size="12" *ngIf="blog">
+            <ion-col size="12" *ngIf="blogDetails">
                 <ion-card class="ion-no-margin">
-                    <img [src]="_DomSanitizationService.bypassSecurityTrustUrl(blog.webviewPath)"
-                         *ngIf="blog?.webviewPath" alt="Blog picture"/>
+                    <img [src]="domService.bypassSecurityTrustUrl(blogDetails.webviewPath)"
+                         *ngIf="blogDetails?.webviewPath" alt="Blog picture"/>
                     <ion-card-header>
-                        <ion-card-subtitle>{{ blog.subtitle }}</ion-card-subtitle>
-                        <ion-card-title>{{ blog.title }}</ion-card-title>
+                        <ion-card-subtitle>{{ blogDetails.subtitle }}</ion-card-subtitle>
+                        <ion-card-title>{{ blogDetails.title }}</ion-card-title>
                     </ion-card-header>
 
                     <ion-card-content>
-                        {{ blog.description }}
+                        {{ blogDetails.description }}
 
                         <div class="ion-margin-top ion-justify-content-between actions">
-                            <ion-button routerLink="/update-blog/{{ blog.id }}" size="medium" expand="full"
-                                        color="light" class="btn">
-                                Update Details
+                            <ion-button routerLink="/update-blog/{{ blogDetails.id }}" size="medium" expand="full"
+                                        color="success" class="btn">
+                                Edit Blog Details
                             </ion-button>
                         </div>
 
                         <div class="ion-margin-top ion-justify-content-between actions">
-                            <ion-button (click)="showAlert()" size="medium" expand="full" color="warning" class="btn">
-                                Delete
+                            <ion-button (click)="showAlert()" size="medium" expand="full" color="danger" class="btn">
+                                Remove Blog
                             </ion-button>
                         </div>
                     </ion-card-content>

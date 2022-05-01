@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {BlogService, UserBlog} from "../services/blog.service";
-import {AlertController, ToastController, ViewWillEnter} from "@ionic/angular";
-import {ActivatedRoute, Router} from "@angular/router";
+import { ApplicationService } from "../services/application.service";
+import { AlertController, ToastController, ViewWillEnter } from "@ionic/angular";
+import { ActivatedRoute, Router } from "@angular/router";
 import { DomSanitizer } from '@angular/platform-browser';
+import { Blogs } from '../interfaces/application.interface';
 
 @Component({
   selector: 'app-view-blog',
@@ -11,48 +12,43 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class ViewBlogPage implements OnInit, ViewWillEnter {
 
-  public blog: UserBlog;
+  public blogDetails: Blogs;
   constructor(
-      public blogService: BlogService,
-      private activatedRoute: ActivatedRoute,
-      public _DomSanitizationService: DomSanitizer,
-      public alertController: AlertController,
-      private toastController: ToastController,
-      private router: Router
+    public blogInstance: ApplicationService,
+    private activatedRoute: ActivatedRoute,
+    public domService: DomSanitizer,
+    public alertCtrl: AlertController,
+    private toastCtrl: ToastController,
+    private router: Router
   ) { }
 
   ngOnInit() {
   }
 
   ionViewWillEnter() {
-    this.activatedRoute.params.subscribe(params => {
-      const id = Number(params.id);
-
-      this.blog = this.blogService.blogs.find(item => item.id === id);
-    });
+    this.activatedRoute
+      .params
+      .subscribe(params => this.blogDetails = this.blogInstance.blogsList.find(item => item.id === Number(params.id)));
   }
 
   async showAlert() {
-    const alert = await this.alertController.create({
+    const alert = await this.alertCtrl.create({
       cssClass: 'my-custom-class',
-      header: 'Want to delete?',
-      message: `<strong>Blog Title: </strong>${this.blog.title}`,
+      header: 'Want to Remove Blog?',
+      message: `<strong>Blog Title: </strong>${this.blogDetails.title}`,
       buttons: [
         {
-          text: 'Cancel',
+          text: 'Cancel Operation',
           role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-          }
+          cssClass: 'secondary'
         }, {
-          text: 'Delete',
+          text: 'Remove Blog',
           cssClass: `danger`,
           handler: () => {
-            const _index = this.blogService.blogs.findIndex(item => item.id === this.blog.id);
+            const _index = this.blogInstance.blogsList.findIndex(item => item.id === this.blogDetails.id);
             if (_index > -1) {
-              this.blogService.deleteBlog(this.blog, _index);
-              this.presentToast();
+              this.blogInstance.deleteBlog(this.blogDetails, _index);
+              this.showToastContainer();
               this.router.navigate(['/']);
             }
           }
@@ -63,8 +59,8 @@ export class ViewBlogPage implements OnInit, ViewWillEnter {
     await alert.present();
   }
 
-  async presentToast() {
-    const toast = await this.toastController.create({
+  async showToastContainer() {
+    const toast = await this.toastCtrl.create({
       message: 'Your Blog has been deleted successfully.',
       duration: 4000
     });

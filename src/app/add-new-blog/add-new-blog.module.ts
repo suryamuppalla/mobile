@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Tab2Page } from './tab2.page';
+import { AddNewBlogPage } from './add-new-blog.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
 @NgModule({
@@ -13,8 +13,8 @@ import { ExploreContainerComponentModule } from '../explore-container/explore-co
     FormsModule,
     ReactiveFormsModule,
     ExploreContainerComponentModule,
-    RouterModule.forChild([{ path: '', component: Tab2Page }])
+    RouterModule.forChild([{ path: '', component: AddNewBlogPage }])
   ],
-  declarations: [Tab2Page]
+  declarations: [AddNewBlogPage]
 })
-export class Tab2PageModule {}
+export class AddNewBlogModule {}

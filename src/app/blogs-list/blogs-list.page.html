@@ -1,7 +1,7 @@
 <ion-header>
     <ion-toolbar>
         <ion-title>
-            Blog Items
+            Blogs List
         </ion-title>
     </ion-toolbar>
 </ion-header>
@@ -9,19 +9,19 @@
 <ion-content>
     <ion-header collapse="condense">
         <ion-toolbar>
-            <ion-title size="large">Blog Items</ion-title>
+            <ion-title size="large">Blogs List</ion-title>
         </ion-toolbar>
     </ion-header>
 
     <ion-grid>
-        <ion-row *ngIf="blogService?.blogs">
-            <ion-col size="12" *ngFor="let blog of blogService.blogs; index as position">
+        <ion-row *ngIf="bService?.blogsList">
+            <ion-col size="12" *ngFor="let blog of bService.blogsList; index as position">
                 <!-- <ion-img [src]="photo.webviewPath">
                 </ion-img> -->
 
                 <ion-card class="ion-no-margin">
                     <img *ngIf="blog?.webviewPath"
-                         [src]="_DomSanitizationService.bypassSecurityTrustUrl(blog.webviewPath)" alt="Blog picture"/>
+                         [src]="domService.bypassSecurityTrustUrl(blog.webviewPath)" alt="Blog Alt Image"/>
                     <ion-card-header>
                         <ion-card-subtitle>{{ blog.subtitle }}</ion-card-subtitle>
                         <ion-card-title>{{ blog.title }}</ion-card-title>
@@ -31,13 +31,12 @@
                         {{ blog.description }}
 
                         <div class="ion-margin-top ion-justify-content-between actions">
-                            <ion-button routerLink="/view-blog/{{ blog.id }}" size="medium" expand="full" color="light"
+                            <ion-button routerLink="/view-blog/{{ blog.id }}" size="medium" expand="full" color="success"
                                         class="btn">
-                                View Details
+                                Details
                             </ion-button>
-                            <ion-button size="medium" (click)="showActionSheet(blog, position)" expand="full"
-                                        color="light"
-                                        class="btn">
+                            <ion-button size="medium" (click)="showMoreDetails(blog, position)" expand="full"
+                                        color="danger" class="btn">
                                 Actions
                             </ion-button>
                         </div>
@@ -47,15 +46,15 @@
             </ion-col>
         </ion-row>
 
-        <ion-row class="ion-margin-top" *ngIf="blogService?.blogs?.length === 0">
+        <ion-row class="ion-margin-top" *ngIf="bService?.blogsList?.length === 0">
             <ion-col>
                 <ion-card class="ion-no-margin">
                     <ion-card-header>
-                        <ion-card-title class="ion-text-center">Oops, No Blogs!</ion-card-title>
+                        <ion-card-title class="ion-text-center">Looks like you haven't added any blog items, click on belo button to add new blog item!</ion-card-title>
                     </ion-card-header>
 
                     <ion-card-content>
-                        <ion-button class="ion-margin-top" expand="block" color="primary" routerLink="/tabs/tab2"
+                        <ion-button class="ion-margin-top" expand="block" color="primary" routerLink="/blogs/add-new-blog"
                                     routerDirection="root">
                             Add New Blog
                         </ion-button>
